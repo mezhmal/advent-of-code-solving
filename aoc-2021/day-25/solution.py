@@ -1,5 +1,11 @@
+import os
+
+
 field = []
-with open('input.txt') as f:
+input_filename = 'input.txt'
+current_directory = os.path.dirname(__file__)
+
+with open(os.path.join(current_directory, input_filename)) as f:
     for line in f.readlines():
         field.append(list(line.strip()))
 

@@ -1,3 +1,6 @@
+import os
+
+
 rock = 1
 paper = 2
 scissors = 3
@@ -32,8 +35,10 @@ combination_score_map_2 = {
 
 scores = []
 scores2 = []
+input_filename = 'input.txt'
+current_directory = os.path.dirname(__file__)
 
-with open('input.txt') as f:
+with open(os.path.join(current_directory, input_filename)) as f:
     for line in f.readlines():
         scores.append(combination_score_map.get(line.strip(), 0))
         scores2.append(combination_score_map_2.get(line.strip(), 0))

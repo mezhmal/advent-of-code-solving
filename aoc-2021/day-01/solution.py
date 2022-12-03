@@ -1,6 +1,11 @@
-measurements = []
+import os
 
-with open('input.txt') as f:
+
+measurements = []
+input_filename = 'input.txt'
+current_directory = os.path.dirname(__file__)
+
+with open(os.path.join(current_directory, input_filename)) as f:
     for line in f.readlines():
         measurements.append(int(line.strip()))
 

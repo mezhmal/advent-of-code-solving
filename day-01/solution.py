@@ -1,5 +1,11 @@
+import os
+
+
 calories = []
-with open('calories.txt') as f:
+input_filename = 'calories.txt'
+current_directory = os.path.dirname(__file__)
+
+with open(os.path.join(current_directory, input_filename)) as f:    
     elf_inventory = 0
     for line in f.readlines():
         value = line.strip()
