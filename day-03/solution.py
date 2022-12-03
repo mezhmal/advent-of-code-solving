@@ -10,15 +10,17 @@ with open(os.path.join(current_directory, input_filename)) as f:
 
 
 def priority(item):
-    return ord(intersection_item) - 38 if intersection_item.isupper() else ord(intersection_item) - 96
+    if item.isupper():
+        return ord(item) - ord('A') + 27
+    else:
+        return ord(item) - ord('a') + 1
 
 # solution for part 1
 
 priorities = []
 for items in rucksacks:
     half_items_length = len(items) // 2
-    first_compartment = items[:half_items_length]
-    second_compartment = items[half_items_length:]
+    first_compartment, second_compartment = items[:half_items_length], items[half_items_length:]
     intersection_item = next(iter(set(first_compartment).intersection(second_compartment)))
     priorities.append(priority(intersection_item))
 
@@ -28,8 +30,10 @@ print(f"Sum of the priorities for rucksacks: {sum(priorities)}")
 
 priorities = []
 for i in range(len(rucksacks) // 3):
-    three_elf_group = rucksacks[i*3:i*3+3]
-    intersection_item = next(iter(set(three_elf_group[0]).intersection(three_elf_group[1], three_elf_group[2])))
+    slice_from, slice_to = i * 3, i * 3 + 3
+    group = rucksacks[slice_from:slice_to]
+    first, second, third = group[0], group[1], group[2]
+    intersection_item = next(iter(set(first).intersection(second, third)))
     priorities.append(priority(intersection_item))
 
 print(f"Sum of the priorities for three-Elf groups: {sum(priorities)}")
