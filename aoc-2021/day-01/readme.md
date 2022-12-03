@@ -1,3 +1,5 @@
+https://adventofcode.com/2021/day/1
+
 --- Day 1: Sonar Sweep ---
 
 You're minding your own business on a ship at sea when the overboard alarm goes off! You rush to see if you can help. Apparently, one of the Elves tripped and accidentally sent the sleigh keys flying into the ocean!
@@ -55,13 +57,13 @@ Considering every single measurement isn't as useful as you expected: there's ju
 Instead, consider sums of a three-measurement sliding window. Again considering the above example:
 
 ```
-199  A      
-200  A B    
-208  A B C  
+199  A
+200  A B
+208  A B C
 210    B C D
 200  E   C D
 207  E F   D
-240  E F G  
+240  E F G
 269    F G H
 260      G H
 263        H
