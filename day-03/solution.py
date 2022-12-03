@@ -8,12 +8,7 @@ with open(os.path.join(current_directory, input_filename)) as f:
     for line in f.readlines():
         rucksacks.append(line.strip())
 
-
-def priority(item):
-    if item.isupper():
-        return ord(item) - ord('A') + 27
-    else:
-        return ord(item) - ord('a') + 1
+priority = lambda item : ord(item) - ord('A') + 27 if item.isupper() else ord(item) - ord('a') + 1
 
 # solution for part 1
 
@@ -31,8 +26,7 @@ print(f"Sum of the priorities for rucksacks: {sum(priorities)}")
 priorities = []
 for i in range(len(rucksacks) // 3):
     slice_from, slice_to = i * 3, i * 3 + 3
-    group = rucksacks[slice_from:slice_to]
-    first, second, third = group[0], group[1], group[2]
+    first, second, third = tuple(rucksacks[slice_from:slice_to])
     intersection_item = next(iter(set(first).intersection(second, third)))
     priorities.append(priority(intersection_item))
 
