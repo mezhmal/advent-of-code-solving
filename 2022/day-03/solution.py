@@ -1,5 +1,6 @@
 import os
 
+
 rucksacks = []
 input_filename = 'input.txt'
 current_directory = os.path.dirname(__file__)
