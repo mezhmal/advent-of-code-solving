@@ -2,7 +2,7 @@ import os
 
 
 calories = []
-input_filename = 'calories.txt'
+input_filename = 'input.txt'
 current_directory = os.path.dirname(__file__)
 
 with open(os.path.join(current_directory, input_filename)) as f:    
