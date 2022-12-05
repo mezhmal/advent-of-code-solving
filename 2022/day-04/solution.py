@@ -9,6 +9,8 @@ with open(os.path.join(current_directory, input_filename)) as f:
     for line in f.readlines():
         assignments.append(line.strip().split(','))
 
+# solution for part 1
+
 contains_count = 0
 for first, second in assignments:
     first_from, first_to = first.split('-')
@@ -19,3 +21,14 @@ for first, second in assignments:
         contains_count += 1
 
 print(f"{contains_count} assignment pairs does one range fully contain the other")
+
+# solution for part 2
+
+overlaps_count = 0
+for first, second in assignments:
+    first_from, first_to = first.split('-')
+    second_from, second_to = second.split('-')
+    if int(second_from) <= int(first_from) <= int(second_to) or int(first_from) <= int(second_from) <= int(first_to):
+        overlaps_count += 1
+
+print(f"{overlaps_count} assignment pairs do the ranges overlap")
