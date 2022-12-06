@@ -1,4 +1,5 @@
 import os
+from copy import deepcopy
 
 
 crates_heap = []
@@ -18,8 +19,6 @@ with open(os.path.join(current_directory, input_filename)) as f:
             _, size, _, stack_from, _, stack_to = data.split(' ')
             steps.append((int(size), stack_from, stack_to))
 
-# solution for part 1
-
 stacks = {}
 stack_numbers = [number for number in stack_numbers_line.split(' ') if number]
 for number in stack_numbers:
@@ -29,15 +28,36 @@ for number in stack_numbers:
         if len(line) > index and line[index] != ' ':
             stacks[number].append(line[index])
 
+# solution for part 1
+
+stacks_for_part_1 = deepcopy(stacks)
+
 for size, stack_from, stack_to in steps:
-    payload = stacks[stack_from][size*-1:][::-1]
-    stacks[stack_from] = stacks[stack_from][:size*-1]
-    stacks[stack_to] = stacks[stack_to] + payload
+    payload = stacks_for_part_1[stack_from][size*-1:][::-1]
+    stacks_for_part_1[stack_from] = stacks_for_part_1[stack_from][:size*-1]
+    stacks_for_part_1[stack_to] = stacks_for_part_1[stack_to] + payload
 
 message = ''
 for number in stack_numbers:
-    last_crate = stacks[number][-1:]
+    last_crate = stacks_for_part_1[number][-1:]
     if last_crate:
         message += last_crate[0]
 
-print(f"message: {message}")
+print(f"CrateMover 9000 message: {message}")
+
+# solution for part 2
+
+stacks_for_part_2 = deepcopy(stacks)
+
+for size, stack_from, stack_to in steps:
+    payload = stacks_for_part_2[stack_from][size*-1:]
+    stacks_for_part_2[stack_from] = stacks_for_part_2[stack_from][:size*-1]
+    stacks_for_part_2[stack_to] = stacks_for_part_2[stack_to] + payload
+
+message = ''
+for number in stack_numbers:
+    last_crate = stacks_for_part_2[number][-1:]
+    if last_crate:
+        message += last_crate[0]
+
+print(f"CrateMover 9001 message: {message}")
