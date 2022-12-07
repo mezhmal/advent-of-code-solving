@@ -72,8 +72,7 @@ with open(os.path.join(current_directory, input_filename)) as f:
                 add_children(work_path, file_name, fs_file, int(file_size))
 
 recalcute_dir_size(work_path)
-
-# print(json.dumps(filesystem, indent=4))
+recalcute_dir_size(['/'])
 
 # solution for part 1
 
@@ -82,8 +81,8 @@ upper_size_limit = 100000
 
 def get_dir_flat_list_recursively(children):
     dir_flat_list = []
-    dirs_among_children = [child_key for child_key in children.keys() if children[child_key][key_type] == fs_dir]
-    for dir_name in dirs_among_children:
+    dir_names = [child_key for child_key in children.keys() if children[child_key][key_type] == fs_dir]
+    for dir_name in dir_names:
         nested_dir_list = get_dir_flat_list_recursively(children[dir_name][key_children])
         dir_flat_list = dir_flat_list + [(dir_name, children[dir_name][key_size])] + nested_dir_list
     return dir_flat_list
@@ -93,3 +92,17 @@ dir_flat_list = get_dir_flat_list_recursively(filesystem[key_children]['/'][key_
 result = sum([dir_size for _, dir_size in dir_flat_list if dir_size <= upper_size_limit])
 
 print(f"Sum of the total sizes of directories with total size of at most {upper_size_limit} is {result}")
+
+total_disk_space = 70000000
+required_for_update_space = 30000000
+used_space = filesystem[key_children]['/'][key_size]
+need_extra_space = required_for_update_space - (total_disk_space - used_space)
+
+sorted_dir_flat_list = sorted(dir_flat_list, key=lambda dir: dir[1])
+result2 = 0
+for _, size in sorted_dir_flat_list:
+    if size > need_extra_space:
+        result2 = size
+        break
+
+print(f"For free up enough space need to delete directory with size {result2}")
