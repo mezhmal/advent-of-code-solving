@@ -1,6 +1,5 @@
 import os
 import time
-from turtle import right
 
 
 key_type = 'type'
