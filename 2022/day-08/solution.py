@@ -119,4 +119,4 @@ if __name__ == "__main__":
     main()
     stop = time.perf_counter()
     print()
-    print(f"Done in {stop-start:0.4f} seconds")
+    print(f"Done in {stop-start:0.3f}s")
