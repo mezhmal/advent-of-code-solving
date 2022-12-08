@@ -70,6 +70,34 @@ def get_inner_visible_count(field:list[list[int]]) -> int:
     return count
 
 
+def get_visible_distance(row:list[int]) -> int:
+    first_tree_height = row[0]
+    count = 0
+    for tree_height in row[1:]:
+        count += 1
+        if tree_height >= first_tree_height:
+            return count
+    return count
+
+
+def get_scenic_score(field:list[list[int]], position:tuple) -> int:
+    distance_to_left = get_visible_distance(get_row(field, position, Direction.LEFT))
+    distance_to_right = get_visible_distance(get_row(field, position, Direction.RIGHT))
+    distance_to_up = get_visible_distance(get_row(field, position, Direction.UP))
+    distance_to_down = get_visible_distance(get_row(field, position, Direction.DOWN))
+    return distance_to_left * distance_to_right * distance_to_up * distance_to_down
+
+
+def get_highest_scenic_score(field:list[list[int]]):
+    field_height = len(field)
+    field_width = len(field[0])
+    highest_score = 0
+    for i in range(1, field_height-1):
+        for j in range(1, field_width-1):
+            highest_score = max(highest_score, get_scenic_score(field, (i, j)))
+    return highest_score
+
+
 def main():
     input_filename = 'input.txt'
     current_directory = os.path.dirname(__file__)
@@ -77,8 +105,13 @@ def main():
 
     # solution for part 1
 
-    result = get_perimeter_length(field) + get_inner_visible_count(field)
-    print(f"(part 1) {result} trees are visible from outside the grid")
+    result1 = get_perimeter_length(field) + get_inner_visible_count(field)
+    print(f"(part 1) {result1} trees are visible from outside the grid")
+
+    # solution for part 2
+
+    result2 = get_highest_scenic_score(field)
+    print(f"(part 2) Highest scenic score is {result2}")
 
 
 if __name__ == "__main__":

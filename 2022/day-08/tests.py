@@ -17,6 +17,7 @@ class TestSolution(unittest.TestCase):
             self.assertIsInstance(field[0], list)
             self.assertIsInstance(field[0][0], int)
 
+
     def test_is_row_visible(self):
         positive_cases = [
             [5, 4, 3, 2, 1],
@@ -83,10 +84,10 @@ class TestSolution(unittest.TestCase):
             ((1, 1), Direction.LEFT, [2]),
         ]
 
-        for position, direction, expected in positive_cases:
-            self.assertEqual(get_row(field, position, direction), expected)
-        for position, direction, expected in negative_cases:
-            self.assertNotEqual(get_row(field, position, direction), expected)
+        for position, direction, expected_row in positive_cases:
+            self.assertEqual(get_row(field, position, direction), expected_row)
+        for position, direction, expected_row in negative_cases:
+            self.assertNotEqual(get_row(field, position, direction), expected_row)
 
 
     def test_get_perimeter_length(self):
@@ -106,7 +107,7 @@ class TestSolution(unittest.TestCase):
         ]
         for field, expected_perimeter in cases:
             self.assertEqual(get_perimeter_length(field), expected_perimeter)
-    
+
 
     def test_get_inner_visible_count(self):
         field = [
@@ -117,7 +118,41 @@ class TestSolution(unittest.TestCase):
             [3, 5, 3, 9, 0],
         ]
         self.assertEqual(get_inner_visible_count(field), 5)
-        
+
+
+    def test_get_scenic_score(self):
+        field = [
+            [3, 0, 3, 7, 3],
+            [2, 5, 5, 1, 2],
+            [6, 5, 3, 3, 2],
+            [3, 3, 5, 4, 9],
+            [3, 5, 3, 9, 0],
+        ]
+        cases = [
+            ((1,1), 1),
+            ((1,2), 4),
+            ((1,3), 1),
+            ((2,1), 6),
+            ((2,2), 1),
+            ((2,3), 2),
+            ((3,1), 1),
+            ((3,2), 8),
+            ((3,3), 3),
+        ]
+        for position, expected_score in cases:
+            self.assertEqual(get_scenic_score(field, position), expected_score)
+
+
+    def test_get_highest_scenic_score(self):
+        field = [
+            [3, 0, 3, 7, 3],
+            [2, 5, 5, 1, 2],
+            [6, 5, 3, 3, 2],
+            [3, 3, 5, 4, 9],
+            [3, 5, 3, 9, 0],
+        ]
+        self.assertEqual(get_highest_scenic_score(field), 8)
+
 
 if __name__ == '__main__':
     unittest.main()
