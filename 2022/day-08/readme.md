@@ -57,7 +57,7 @@ In the example above, consider the middle 5 in the second row:
 - Looking right, its view is not blocked; it can see 2 trees.
 - Looking down, its view is blocked eventually; it can see 2 trees (one of height 3, then the tree of height 5 that blocks its view).
 
-A tree's scenic score is found by multiplying together its viewing distance in each of the four directions. For this tree, this is 4 (found by multiplying 1 _ 1 _ 2 \* 2).
+A tree's scenic score is found by multiplying together its viewing distance in each of the four directions. For this tree, this is 4 (found by multiplying `1 * 1 * 2 * 2`).
 
 However, you can do even better: consider the tree of height 5 in the middle of the fourth row:
 
@@ -74,6 +74,6 @@ However, you can do even better: consider the tree of height 5 in the middle of 
 - Looking down, its view is also not blocked; it can see 1 tree.
 - Looking right, its view is blocked at 2 trees (by a massive tree of height 9).
 
-This tree's scenic score is 8 (2 _ 2 _ 1 \* 2); this is the ideal spot for the tree house.
+This tree's scenic score is 8 (`2 * 2 * 1 * 2`); this is the ideal spot for the tree house.
 
 Consider each tree on your map. What is the highest scenic score possible for any tree?
