@@ -92,18 +92,18 @@ class TestSolution(unittest.TestCase):
 
     def test_get_perimeter_length(self):
         cases = [
-            ([[0 for j in range(1)] for i in range(1)], 1),
-            ([[0 for j in range(1)] for i in range(2)], 2),
-            ([[0 for j in range(2)] for i in range(2)], 4),
-            ([[0 for j in range(2)] for i in range(3)], 6),
-            ([[0 for j in range(3)] for i in range(3)], 8),
-            ([[0 for j in range(3)] for i in range(4)], 10),
-            ([[0 for j in range(4)] for i in range(4)], 12),
-            ([[0 for j in range(1)] for i in range(5)], 5),
-            ([[0 for j in range(2)] for i in range(5)], 10),
-            ([[0 for j in range(3)] for i in range(5)], 12),
-            ([[0 for j in range(4)] for i in range(5)], 14),
-            ([[0 for j in range(5)] for i in range(5)], 16),
+            ([[0] * 1] * 1, 1),
+            ([[0] * 1] * 2, 2),
+            ([[0] * 2] * 2, 4),
+            ([[0] * 2] * 3, 6),
+            ([[0] * 3] * 3, 8),
+            ([[0] * 3] * 4, 10),
+            ([[0] * 4] * 4, 12),
+            ([[0] * 1] * 5, 5),
+            ([[0] * 2] * 5, 10),
+            ([[0] * 3] * 5, 12),
+            ([[0] * 4] * 5, 14),
+            ([[0] * 5] * 5, 16),
         ]
         for field, expected_perimeter in cases:
             self.assertEqual(get_perimeter_length(field), expected_perimeter)
