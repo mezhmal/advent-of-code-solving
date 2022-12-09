@@ -22,18 +22,18 @@ class TestSolution(unittest.TestCase):
 
     def test_get_field_dimentions(self):
         cases = [
-            ([[undefined_position] * 1] * 1, (1, 1)),
-            ([[undefined_position] * 2] * 1, (1, 2)),
-            ([[undefined_position] * 1] * 2, (2, 1)),
-            ([[undefined_position] * 3] * 5, (5, 3)),
-            ([[undefined_position] * 1] * 100, (100, 1)),
+            ([[empty_mark] * 1] * 1, (1, 1)),
+            ([[empty_mark] * 2] * 1, (1, 2)),
+            ([[empty_mark] * 1] * 2, (2, 1)),
+            ([[empty_mark] * 3] * 5, (5, 3)),
+            ([[empty_mark] * 1] * 100, (100, 1)),
         ]
         for field, expected_dimentions in cases:
             self.assertEqual(get_field_dimentions(field), expected_dimentions)
 
 
     def test_expand_field(self):
-        initial_field = [[visited_position] * 3] * 3
+        initial_field = [[visited_mark] * 3] * 3
         cases = [
             (initial_field, Direction.LEFT, 2, (3, 5)),
             (initial_field, Direction.RIGHT, 3, (3, 6)),
