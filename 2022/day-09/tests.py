@@ -1,7 +1,7 @@
 import os
 import unittest
 from solution import *
-from test_data import test_data_for_move
+from test_data import test_data_for_move_rope
 
 
 class TestSolution(unittest.TestCase):
@@ -9,7 +9,8 @@ class TestSolution(unittest.TestCase):
     def test_read_motions_from_file(self):
         current_directory = os.path.dirname(__file__)
         filenames = [
-            os.path.join(current_directory, 'example.txt'),
+            os.path.join(current_directory, 'example1.txt'),
+            os.path.join(current_directory, 'example2.txt'),
             os.path.join(current_directory, 'input.txt'),
         ]
         for filename in filenames:
@@ -22,18 +23,18 @@ class TestSolution(unittest.TestCase):
 
     def test_get_field_dimentions(self):
         cases = [
-            ([[empty_mark] * 1] * 1, (1, 1)),
-            ([[empty_mark] * 2] * 1, (1, 2)),
-            ([[empty_mark] * 1] * 2, (2, 1)),
-            ([[empty_mark] * 3] * 5, (5, 3)),
-            ([[empty_mark] * 1] * 100, (100, 1)),
+            ([[Mark.EMPTY] * 1] * 1, (1, 1)),
+            ([[Mark.EMPTY] * 2] * 1, (1, 2)),
+            ([[Mark.EMPTY] * 1] * 2, (2, 1)),
+            ([[Mark.EMPTY] * 3] * 5, (5, 3)),
+            ([[Mark.EMPTY] * 1] * 100, (100, 1)),
         ]
         for field, expected_dimentions in cases:
             self.assertEqual(get_field_dimentions(field), expected_dimentions)
 
 
     def test_expand_field(self):
-        initial_field = [[visited_mark] * 3] * 3
+        initial_field:Field = [[Mark.EMPTY] * 3] * 3
         cases = [
             (initial_field, Direction.LEFT, 2, (3, 5)),
             (initial_field, Direction.RIGHT, 3, (3, 6)),
@@ -49,9 +50,9 @@ class TestSolution(unittest.TestCase):
                 self.assertEqual(len(row), expected_width)
 
 
-    def test_move(self):
-        for params, expected_result in test_data_for_move:
-            self.assertEqual(move(*params), expected_result)
+    def test_move_rope(self):
+        for params, expected_result in test_data_for_move_rope:
+            self.assertEqual(move_rope(*params), expected_result)
 
 
 if __name__ == '__main__':
