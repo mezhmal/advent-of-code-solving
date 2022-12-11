@@ -14,6 +14,7 @@ class Mark(Enum):
     EMPTY   = '.'
     VISITED = '@'
 
+
 Field = list[list[Mark]]
 Motion = tuple[Direction, int]
 Motions = list[Motion]

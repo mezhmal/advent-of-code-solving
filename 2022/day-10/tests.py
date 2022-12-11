@@ -16,8 +16,8 @@ class TestSolution(unittest.TestCase):
             self.assertIsInstance(program, list)
 
 
-    def test_execute_program(self):
-        program = [
+    def test_get_sum_of_signal_strengths(self):
+        src = [
             'noop',
             'add 3',
             'add -5',
@@ -28,6 +28,7 @@ class TestSolution(unittest.TestCase):
             'add -4',
             'noop'
         ]
+        program = transpile(src)
         cases = [
             ([1], 1),
             ([2], 2),
@@ -45,7 +46,7 @@ class TestSolution(unittest.TestCase):
         ]
 
         for measurement_scale, expected_signal_strenght in cases:
-            self.assertEqual(execute_program(program, measurement_scale), expected_signal_strenght)
+            self.assertEqual(get_sum_of_signal_strengths(program, measurement_scale), expected_signal_strenght)
 
 
 if __name__ == '__main__':
