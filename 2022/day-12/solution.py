@@ -89,10 +89,10 @@ def setup(start_position:Position) -> None:
     tree = []
     node_key = get_node_key(start_position)
     touched_nodes[node_key] = start_position
-    for child_position, _ in get_children_up(start_position):
-        child_key = get_node_key(child_position)
-        touched_nodes[child_key] = child_position
-        branch:Branch = [(child_key, None)]
+    for neighbor_position, _ in get_neighbors_higher(start_position):
+        neighbor_key = get_node_key(neighbor_position)
+        touched_nodes[neighbor_key] = neighbor_position
+        branch:Branch = [(neighbor_key, None)]
         tree.append(branch)
 
 
@@ -140,32 +140,37 @@ def take_one_step(branch:Branch) -> list[Branch]:
     branches:list[Branch] = []
     last_node_key, _ = branch[-1]
     last_node_position = touched_nodes[last_node_key]
-    children = get_children_up(last_node_position)
-    for child_position, child_direction in children:
-        child_node_key = get_node_key(child_position)
-        node_is_toched = touched_nodes.get(child_node_key)
+    neighbors = get_neighbors_higher(last_node_position)
+    for neighbor_position, neighbor_direction in neighbors:
+        neighbor_key = get_node_key(neighbor_position)
+        node_is_toched = touched_nodes.get(neighbor_key) != None
         if not node_is_toched:
-            touched_nodes[child_node_key] = child_position
-            branches += [branch[:-1] + [(last_node_key, child_direction), (child_node_key, None)]]
+            touched_nodes[neighbor_key] = neighbor_position
+            branches += [branch[:-1] + [(last_node_key, neighbor_direction), (neighbor_key, None)]]
     
     return branches
 
 
-def get_children_up(position:Position) -> list[tuple[Position, Direction]]:
+def get_neighbors_higher(position:Position) -> list[tuple[Position, Direction]]:
     i, j = position
     height, width = len(map), len(map[0])
-    children = []
+    neighbors = []
+
+    """
+    it seems here using incorrect comparison
+    but if try to fix it, no path will be found 
+    """
 
     if 0 <= j - 1 and map[i][j-1] - 1 <= map[i][j]:
-        children.append(((i, j-1), Direction.LEFT))
+        neighbors.append(((i, j-1), Direction.LEFT))
     if 0 <= i - 1 and map[i-1][j] - 1 <= map[i][j]:
-        children.append(((i-1, j), Direction.UP))
+        neighbors.append(((i-1, j), Direction.UP))
     if j + 1 < width and map[i][j+1] - 1 <= map[i][j]:
-        children.append(((i, j+1), Direction.RIGHT))
+        neighbors.append(((i, j+1), Direction.RIGHT))
     if i + 1 < height and map[i+1][j] - 1 <= map[i][j]:
-        children.append(((i+1, j), Direction.DOWN))
+        neighbors.append(((i+1, j), Direction.DOWN))
 
-    return children
+    return neighbors
 
 
 def print_path(field:SourceMap, branch:Branch) -> None:
