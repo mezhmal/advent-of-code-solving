@@ -39,11 +39,13 @@ then current branch will be deleted
 
 if node in any branch is end_position, then we stop find process
 
+collect touched nodes for exclude re-lookup nodes and loops in pathes
+
 """
 
 source_map:SourceMap = []
 map:ConvertedMap = []
-nodes:Nodes = {}
+touched_nodes:Nodes = {}
 tree:Tree = []
 
 
@@ -81,15 +83,15 @@ def convert_map(map:SourceMap) -> tuple[ConvertedMap, Position, Position]:
 
 
 def setup(start_position:Position) -> None:
-    global nodes
+    global touched_nodes
     global tree
-    nodes = {}
+    touched_nodes = {}
     tree = []
     node_key = get_node_key(start_position)
-    nodes[node_key] = start_position
-    for child_position, child_direction in get_children(start_position):
+    touched_nodes[node_key] = start_position
+    for child_position, _ in get_children_up(start_position):
         child_key = get_node_key(child_position)
-        nodes[child_key] = child_position
+        touched_nodes[child_key] = child_position
         branch:Branch = [(child_key, None)]
         tree.append(branch)
 
@@ -98,7 +100,7 @@ def get_node_key(node_position:Position) -> NodeKey:
     return str(node_position)
 
 
-def find_path(end_position:Position) -> Branch:
+def climb_up(end_position:Position) -> Branch:
     global tree
     max_steps = 1000
     end_position_key = get_node_key(end_position)
@@ -109,7 +111,7 @@ def find_path(end_position:Position) -> Branch:
 
         stop = time.perf_counter()
 
-        print(f"step: {step}; branches: {len(tree)}; {stop-start:0.2f}s")
+        # print(f"step: {step}; branches: {len(tree)}; {stop-start:0.2f}s")
 
         for i in range(len(tree)):
             branch = tree[i]
@@ -137,41 +139,41 @@ def find_path(end_position:Position) -> Branch:
 def take_one_step(branch:Branch) -> list[Branch]:
     branches:list[Branch] = []
     last_node_key, _ = branch[-1]
-    last_node_position = nodes[last_node_key]
-    children = get_children(last_node_position)
+    last_node_position = touched_nodes[last_node_key]
+    children = get_children_up(last_node_position)
     for child_position, child_direction in children:
         child_node_key = get_node_key(child_position)
-        node_is_toched = nodes.get(child_node_key)
+        node_is_toched = touched_nodes.get(child_node_key)
         if not node_is_toched:
-            nodes[child_node_key] = child_position
+            touched_nodes[child_node_key] = child_position
             branches += [branch[:-1] + [(last_node_key, child_direction), (child_node_key, None)]]
     
     return branches
 
 
-def get_children(position:Position) -> list[tuple[Position, Direction]]:
+def get_children_up(position:Position) -> list[tuple[Position, Direction]]:
     i, j = position
     height, width = len(map), len(map[0])
     children = []
 
-    if 0 <= j - 1 and map[i][j-1] - 1 <= map[i][j] <= map[i][j-1] + 1:
+    if 0 <= j - 1 and map[i][j-1] - 1 <= map[i][j]:
         children.append(((i, j-1), Direction.LEFT))
-    if 0 <= i - 1 and map[i-1][j] - 1 <= map[i][j] <= map[i-1][j] + 1:
+    if 0 <= i - 1 and map[i-1][j] - 1 <= map[i][j]:
         children.append(((i-1, j), Direction.UP))
-    if j + 1 < width and map[i][j+1] - 1 <= map[i][j] <= map[i][j+1] + 1:
+    if j + 1 < width and map[i][j+1] - 1 <= map[i][j]:
         children.append(((i, j+1), Direction.RIGHT))
-    if i + 1 < height and map[i+1][j] - 1 <= map[i][j] <= map[i+1][j] + 1:
+    if i + 1 < height and map[i+1][j] - 1 <= map[i][j]:
         children.append(((i+1, j), Direction.DOWN))
 
     return children
 
 
 def print_path(field:SourceMap, branch:Branch) -> None:
-    for i, j in nodes.values():
+    for i, j in touched_nodes.values():
         field[i][j] = ' '
 
     for node_key, next_node_direction in branch:
-        i, j = nodes[node_key]
+        i, j = touched_nodes[node_key]
         field[i][j] = next_node_direction.value if next_node_direction else '❖'
 
     for row in field:
@@ -187,26 +189,20 @@ def main() -> None:
     source_map = read_map_from_file(os.path.join(current_directory, input_filename))
     map, start_position, end_position = convert_map(source_map)
 
-    print(start_position, '→', end_position)
+    # print(start_position, '→', end_position)
     # for row in map:
     #     print(' '.join([str(node).rjust(2, ' ') for node in row]))
 
     setup(start_position)
-    path = find_path(end_position)
+    path = climb_up(end_position)
     
     # if path:
     #     print()
     #     print_path(deepcopy(source_map), path)
     #     print()
 
-
-    """
-    I couldn't find a way beetween letters 's' and 't' =(
-    bun if replace letter 'q' in line 13, col 147 by letter 'r' answer will correct
-    """
-
     if path:
-        print(f"(part 1) required {len(path)} steps")
+        print(f"(part 1) required {len(path)} steps for climp up to get the best signal")
     else:
         print('¯\_(ツ)_/¯')
 
