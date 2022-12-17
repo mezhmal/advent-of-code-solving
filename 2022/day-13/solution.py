@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from functools import cmp_to_key, reduce
 
 
 """
@@ -27,6 +28,7 @@ def read_signal_from_file(filename:str) -> Signal:
                     left_packet = packet
                 else:
                     right_packet = packet
+    signal.append((left_packet, right_packet))
 
     return signal
 
@@ -57,6 +59,15 @@ def is_order_right(left_packet:Packet, right_packet:Packet) -> bool | None:
         return True
 
 
+def packets_comporator(packet1:Packet, packet2:Packet) -> int:
+    return -1 if is_order_right(packet1, packet2) else 1
+
+
+def get_decoder_key(packets:list[Packet], divider_packets:list[Packet]) -> int:
+    indices_of_the__divider_packets = [packets.index(divider_packet) + 1 for divider_packet in divider_packets]
+    return reduce(lambda x, y: x * y, indices_of_the__divider_packets, 1)
+
+
 def main() -> None:
     input_filename = 'input.txt'
     current_directory = os.path.dirname(__file__)
@@ -69,7 +80,20 @@ def main() -> None:
         if is_order_right(*signal[i]):
             indices_of_the_pairs_that_are_already_in_the_right_order.append(i + 1)
 
-    print(f"(part1) sum of indices of the pairs that are already in the right order: {sum(indices_of_the_pairs_that_are_already_in_the_right_order)}")
+    print(f"(part1) Sum of indices of the pairs that are already in the right order: {sum(indices_of_the_pairs_that_are_already_in_the_right_order)}")
+
+
+    # solution for part 2
+
+    divider_packets = [[[2]], [[6]]]
+    packets:list[Packet] = [] + divider_packets
+    for left_packet, right_packet in signal:
+        packets += [left_packet, right_packet]
+
+    sort_key = cmp_to_key(packets_comporator)
+    packets.sort(key=sort_key)
+    decoder_key = get_decoder_key(packets, divider_packets)
+    print(f"(part 2) Decoder key for the distress signal: {decoder_key}")
 
 
 if __name__ == "__main__":
