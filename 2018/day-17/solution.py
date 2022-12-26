@@ -152,10 +152,10 @@ def fill_with_water() -> None:
                 y -= 1
 
 
-def count_water() -> int:
+def count_water(kind:list[Matter]) -> int:
     global slice_map
 
-    return sum([sum([1 for tile in line if tile in [Matter.PASS_WATER, Matter.REST_WATER]]) for line in slice_map])
+    return sum([sum([1 for tile in line if tile in kind]) for line in slice_map])
 
 
 def print_slice_map() -> None:
@@ -172,14 +172,12 @@ def main() -> None:
     input_filename = 'input.txt'
     current_directory = os.path.dirname(__file__)
     scan_data = read_scan_data_from_file(os.path.join(current_directory, input_filename))
-
-    # solution for part 1
-
     init_slice_map(scan_data)
     spring_water_position_x, spring_water_position_y = get_spring_water_position()
     leak_queue.append((spring_water_position_x, spring_water_position_y + 1))
     fill_with_water()
-    print(f"(part 1) total number of tiles the water can reach is {count_water()}")
+    print(f"(part 1) total number of tiles the water can reach is {count_water([Matter.PASS_WATER, Matter.REST_WATER])}")
+    print(f"(part 2) {count_water([Matter.REST_WATER])} tiles of water will be retained after the water spring will dry up")
 
 
 if __name__ == "__main__":
