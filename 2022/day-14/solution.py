@@ -5,11 +5,11 @@ from enum import Enum
 
 
 class Matter(Enum):
-    AIR          = '.'
-    ROCK         = '#'
-    SAND_SOURCE  = '+'
-    REST_SAND    = 'o'
-    FALLING_SAND = '~'
+    AIR            = '.'
+    ROCK           = '#'
+    SOURCE_OF_SAND = '+'
+    REST_SAND      = 'o'
+    FALLING_SAND   = '~'
 
 PositionX = int
 PositionY = int
@@ -70,11 +70,56 @@ def init_map(rocks:Rocks) -> None:
         map += [[Matter.AIR] * map_width]
 
     fill_with_rocks(rocks, (min_x - 1, min_y - top_gap))
-    map[0][500 - min_x + 1] = Matter.SAND_SOURCE
+    map[0][500 - min_x + 1] = Matter.SOURCE_OF_SAND
 
 
-def simulate_falling_sand() -> None:
-    pass
+def simulate_falling_sand() -> int:
+    source_of_sand = find_source_of_sand()
+
+    fallen_units = 0
+
+    while fall_one_unit_of_sand(source_of_sand):
+        fallen_units += 1
+
+        if fallen_units > 10000:
+            return 0
+
+    return fallen_units
+
+def find_source_of_sand() -> Position:
+    for y in range(len(map)):
+        for x in range(len(map[y])):
+            if map[y][x] == Matter.SOURCE_OF_SAND:
+                return x, y
+
+
+def fall_one_unit_of_sand(position:Position) -> bool:
+    x, y = position
+    map_heigth = len(map)
+    while True:
+        if y + 1 == map_heigth:
+            'sand starts flowing into the abyss below'
+            return False
+
+        if map[y + 1][x] == Matter.AIR:
+            'trying to move down'
+            y += 1
+            continue
+
+        if map[y + 1][x - 1] == Matter.AIR:
+            'trying to move down-left'
+            y += 1
+            x -= 1
+            continue
+
+        if map[y + 1][x + 1] == Matter.AIR:
+            'trying to move down-right'
+            y += 1
+            x += 1
+            continue
+
+        map[y][x] = Matter.REST_SAND
+        return True
 
 
 def print_map() -> None:
@@ -85,12 +130,17 @@ def print_map() -> None:
 
 
 def main() -> None:
-    input_filename = 'example.txt'
+    input_filename = 'input.txt'
     current_directory = os.path.dirname(__file__)
     rocks = read_scan_data_from_file(os.path.join(current_directory, input_filename))
     init_map(rocks)
-    simulate_falling_sand()
-    print_map()
+    
+    # solution for part 1
+
+    fallen_units = simulate_falling_sand()
+    print(f"(part 1) {fallen_units} units of sand come to rest before sand starts flowing into the abyss below")
+
+    # print_map()
 
 
 if __name__ == "__main__":
