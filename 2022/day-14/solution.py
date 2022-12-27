@@ -19,6 +19,7 @@ Map = list[list[Matter]]
 
 
 map:Map = []
+source_of_sand:Position = (500, 0)
 
 
 def read_scan_data_from_file(filename:str) -> Rocks:
@@ -74,27 +75,53 @@ def init_map(rocks:Rocks) -> None:
 
 
 def simulate_falling_sand() -> int:
-    source_of_sand = find_source_of_sand()
+    find_source_of_sand()
 
     fallen_units = 0
 
-    while fall_one_unit_of_sand(source_of_sand):
+    while fall_one_unit_of_sand():
         fallen_units += 1
 
-        if fallen_units > 10000:
+        if fallen_units > 100000:
             return 0
 
     return fallen_units
 
-def find_source_of_sand() -> Position:
+
+def find_source_of_sand() -> None:
+    global source_of_sand
+
     for y in range(len(map)):
         for x in range(len(map[y])):
             if map[y][x] == Matter.SOURCE_OF_SAND:
-                return x, y
+                source_of_sand = (x, y)
+                return
 
 
-def fall_one_unit_of_sand(position:Position) -> bool:
-    x, y = position
+def expand_map_to_left() -> None:
+    global map
+    global source_of_sand
+
+    for line in map:
+        line.insert(0, Matter.AIR)
+
+    map[-1][0] = Matter.ROCK
+
+    x, y = source_of_sand
+    source_of_sand = (x + 1, y)
+
+
+def expand_map_to_right() -> None:
+    global map
+
+    for line in map:
+        line.append(Matter.AIR)
+
+    map[-1][-1] = Matter.ROCK
+
+
+def fall_one_unit_of_sand() -> bool:
+    x, y = source_of_sand
     map_heigth = len(map)
     while True:
         if y + 1 == map_heigth:
@@ -105,12 +132,19 @@ def fall_one_unit_of_sand(position:Position) -> bool:
             'trying to move down'
             y += 1
             continue
+        
+        if x == 0:
+            expand_map_to_left()
+            x = 1
 
         if map[y + 1][x - 1] == Matter.AIR:
             'trying to move down-left'
             y += 1
             x -= 1
             continue
+
+        if x == len(map[y]) - 1:
+            expand_map_to_right()
 
         if map[y + 1][x + 1] == Matter.AIR:
             'trying to move down-right'
@@ -119,7 +153,15 @@ def fall_one_unit_of_sand(position:Position) -> bool:
             continue
 
         map[y][x] = Matter.REST_SAND
-        return True
+        return (x, y) != source_of_sand
+
+
+def add_floor() -> None:
+    global map
+
+    map_width = len(map[-1])
+    map.append([Matter.AIR] * map_width)
+    map.append([Matter.ROCK] * map_width)
 
 
 def print_map() -> None:
@@ -138,7 +180,13 @@ def main() -> None:
     # solution for part 1
 
     fallen_units = simulate_falling_sand()
-    print(f"(part 1) {fallen_units} units of sand come to rest before sand starts flowing into the abyss below")
+    print(f"(part 1) {fallen_units} units of sand")
+
+    # solution for part 2
+
+    add_floor()
+    some_more_fallen_units = simulate_falling_sand()
+    print(f"(part 2) {fallen_units + some_more_fallen_units + 1} units of sand")
 
     # print_map()
 
