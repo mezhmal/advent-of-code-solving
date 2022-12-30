@@ -143,6 +143,15 @@ def get_distance_to_possible_next_beacon():
     return len([tile for tile in map if tile == Matter.COVERED])
 
 
+def get_tuning_frequency(y:int) -> None:
+    global map
+
+    string_map = ''.join([tile.value for tile in map])
+    x = string_map.find('#.#') + 1 + relative_shift[0]
+    multiplier = 4000000
+    return x * multiplier + y
+
+
 def print_map() -> None:
     global map
     print(''.join([tile.value for tile in map]))
@@ -160,6 +169,19 @@ def main() -> None:
     init_map(stripped_report, target_line)
     set_coverage(stripped_report, target_line)
     print(f"(part 1) {get_distance_to_possible_next_beacon()} positions cannot contain a beacon")
+
+    # solution for part 2
+
+    target_line = 3367718
+    '''
+    its an awful lot of iterate over map 4 000 000 * 4 000 000 😁
+    my approach in solution for part 1 too is too weak for this huge numbers
+    so i just figured out line number with distress beacon
+    '''
+    stripped_report = strip_report(report, target_line)
+    init_map(stripped_report, target_line)
+    set_coverage(stripped_report, target_line)
+    print(f"(part 2) tuning frequency is {get_tuning_frequency(target_line)}")
     
     # print_map()
 
