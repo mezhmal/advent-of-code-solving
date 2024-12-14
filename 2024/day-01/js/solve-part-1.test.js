@@ -1,8 +1,8 @@
 const path = require('node:path')
 const { expect, test } = require('@jest/globals')
 const { getFile, readFile } = require('../../../tools/js')
+const { parse } = require('./parse')
 const { solvePart1 } = require('./solve-part-1')
-const { parse } = require('.')
 
 test('day 1. part 1 (short test)', async () => {
   const filename = path.join(__dirname, 'test.txt')
