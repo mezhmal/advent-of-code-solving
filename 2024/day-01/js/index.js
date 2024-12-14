@@ -1,6 +1,6 @@
 const path = require('node:path')
 const { getFile, readFile } = require('../../../tools/js')
-const { solve } = require('./solve')
+const { solvePart2 } = require('./solve-part-2')
 
 const parse = (data) => {
   const leftList = []
@@ -20,6 +20,6 @@ module.exports = { parse }
 const url = 'https://adventofcode.com/2024/day/1/input'
 getFile(url).then(data => {
   const { leftList, rightList } = parse(data)
-  const result = solve(leftList, rightList)
+  const result = solvePart2(leftList, rightList)
   console.log(result)
 })
