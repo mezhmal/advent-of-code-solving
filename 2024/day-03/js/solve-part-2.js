@@ -1,11 +1,16 @@
-const excludePattern = /don't\(\).*?do\(\)/g
-const mulPattern = /mul\(\d{1,3},\d{1,3}\)/g
+const { solvePart1 } = require("./solve-part-1")
+
+const enabler = 'do()'
+const disabler = "don't()"
+const excludePattern = new RegExp(`${disabler}.*?${enabler}`, 'g')
 
 const solvePart2 = (memory) => {
-  const enabledMemory = `do()${memory}`.split("don't()").map(part => `don't()${part}do()`).map(part => part.replace(excludePattern, '')).join('')
-  const instructions = Array.from(enabledMemory.matchAll(mulPattern), (x) => x[0])
-  const multipliers = instructions.map(instruction => Array.from(instruction.matchAll(/\d{1,3}/g), (x) => Number.parseInt(x[0], 10)))
-  return multipliers.reduce((acc, [m1, m2]) => acc + m1 * m2, 0)
+  const enabledMemory = `${enabler}${memory}`
+    .split(disabler)
+    .map(part => `${disabler}${part}${enabler}`)
+    .map(part => part.replace(excludePattern, ''))
+    .join('')
+  return solvePart1(enabledMemory)
 }
 
 module.exports = { solvePart2 }
