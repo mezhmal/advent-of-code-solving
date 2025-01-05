@@ -10,6 +10,7 @@ const parseRulesAndUpdates = (lines) => {
       updates.push(line.split(',').map(x => +x))
     }
   }
+  return [rules, updates]
 }
 
 const getRules = (number) => {
@@ -46,11 +47,11 @@ const checkIfUpdateCorrectlyOrdered = (update) => {
 const getMiddleNumber = (update) => update[(update.length - 1) / 2]
 
 const solvePart1 = (lines) => {
-  parseRulesAndUpdates(lines)
+  const [_, updates] = parseRulesAndUpdates(lines)
   const correctlyOrderedUpdates = updates.filter(checkIfUpdateCorrectlyOrdered)
   const middleNumbers = correctlyOrderedUpdates.map(getMiddleNumber)
 
   return middleNumbers.reduce((a, b) => a + b, 0)
 }
 
-module.exports = { solvePart1 }
+module.exports = { solvePart1, parseRulesAndUpdates, getRules, checkIfUpdateCorrectlyOrdered, getMiddleNumber }
