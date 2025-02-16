@@ -89,4 +89,4 @@ const solvePart1 = (lines) => {
   return lab.dirtyPositions
 }
 
-module.exports = { solvePart1 }
+module.exports = { solvePart1, Lab }
