@@ -3,7 +3,7 @@ const { getFile, readFile } = require('../../../tools/js')
 const { parse } = require('./parse')
 const { solvePart2 } = require('./solve-part-2')
 
-// const filename = path.join(__dirname, 'test-2.txt')
+// const filename = path.join(__dirname, '../test-2.txt')
 // readFile(filename).then(data => {
 //   const memory = parse(data)
 //   const result = solvePart2(memory)

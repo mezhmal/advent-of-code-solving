@@ -5,7 +5,7 @@ const { parse } = require('./parse')
 const { solvePart2 } = require('./solve-part-2')
 
 test('day 5. part 2 (short test)', async () => {
-  const filename = path.join(__dirname, 'test.txt')
+  const filename = path.join(__dirname, '../test.txt')
   const data = await readFile(filename)
   const lines = parse(data)
   const result = solvePart2(lines)
