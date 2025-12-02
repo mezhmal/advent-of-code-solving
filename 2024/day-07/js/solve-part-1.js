@@ -8,7 +8,8 @@ const operators = {
 const parseLine = (line) => {
   const [testValue, numbers] = line.split(':')
   return {
-    testValue: Number.parseInt(testValue, 10), numbers: numbers.trim().split(' ').map(value => Number.parseInt(value, 10))
+    testValue: Number.parseInt(testValue, 10),
+    numbers: numbers.trim().split(' ').map(value => Number.parseInt(value, 10))
   }
 }
 
